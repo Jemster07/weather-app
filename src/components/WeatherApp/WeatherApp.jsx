@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './WeatherApp.css';
 import search_icon from '../assets/search.png';
 import clear_icon from '../assets/clear.png';
@@ -12,14 +12,25 @@ import humidity_icon from '../assets/humidity.png';
 const WeatherApp = () => {
 
     const [weatherIcon, setWeatherIcon] = useState(cloud_icon);
+    const [latitude, setLatitude] = useState([]);
+    const [longitude, setLongitude] = useState([]);
 
-    const search = async () => {
-        const element = document.getElementsByClassName("cityInput");
-        const humidity = document.getElementsByClassName("humidity-percent");
-        const wind = document.getElementsByClassName("wind-rate");
-        const temp = document.getElementsByClassName("weather-temp");
-        const location = document.getElementsByClassName("weather-location");    
-        
+    const element = document.getElementsByClassName("cityInput");
+    const humidity = document.getElementsByClassName("humidity-percent");
+    const wind = document.getElementsByClassName("wind-rate");
+    const temp = document.getElementsByClassName("weather-temp");
+    const location = document.getElementsByClassName("weather-location");
+    
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+        });
+
+
+    }, []);
+
+    const search = async () => {        
         if(element[0].value === "")
         {
             return 0;
