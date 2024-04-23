@@ -14,46 +14,43 @@ const WeatherApp = () => {
     const [latitude, setLatitude] = useState([]);
     const [longitude, setLongitude] = useState([]);
     const [weatherIcon, setWeatherIcon] = useState(cloud_icon);
-    const [humidity, setHumidity] = useState([]);
-    const [wind, setWind] = useState([]);
-    const [temp, setTemp] = useState([]);
-    const [location, setLocation] = useState([]);
+    const [localData, setLocalData] = useState([]);
 
     useEffect(() => {
-        let ignore = false;
-
-        async function startFetching() {
-
-            if (!ignore) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    setLatitude(position.coords.latitude);
-                    setLongitude(position.coords.longitude);
-                });
-
-                let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
-                let response = await fetch(url);
-                let data = await response.json();
-
-                setHumidity(data.main.humidity);
-                setWind(Math.floor(data.wind.speed));
-                setTemp(Math.floor(data.main.temp));
-                setLocation(data.name);
-            }
-        }
-
-        startFetching();
-
-        return () => {
-            ignore = true;
-        };
+        getCoordinates();
     }, []);
 
-    const search = async () => {
-        const element = document.getElementsByClassName("cityInput");
+    useEffect(() => {
+        const getLocalWeather = async () => {
+            let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
+            let response = await fetch(url);
+            let data = await response.json();
+            setLocalData(data);
+        }
+        getLocalWeather();
+    }, [latitude, longitude]);
+
+    useEffect(() => {
         const humidity = document.getElementsByClassName("humidity-percent");
         const wind = document.getElementsByClassName("wind-rate");
         const temp = document.getElementsByClassName("weather-temp");
-        const location = document.getElementsByClassName("weather-location");
+        const location = document.getElementsByClassName("weather-location");    
+        
+        humidity[0].innerHTML = `${localData.main.humidity} %`;
+        wind[0].innerHTML = `${Math.floor(localData.wind.speed)} mph`;
+        temp[0].innerHTML = `${Math.floor(localData.main.temp)}&deg;F`;
+        location[0].innerHTML = localData.name;
+    }, [localData]);
+
+    const getCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+        });
+    }
+
+    const search = async () => {
+        const element = document.getElementsByClassName("cityInput");
 
         if (element[0].value === "") {
             return 0;
@@ -90,39 +87,33 @@ const WeatherApp = () => {
 
     return (
         <div className="container">
-
             <div className="top-bar">
                 <input type="text" className="cityInput" placeholder="search" />
                 <div className="search-icon" onClick={() => { search() }}>
                     <img src={search_icon} alt="" />
                 </div>
             </div>
-
             <div className="weather-image">
                 <img src={weatherIcon} alt="" />
             </div>
-            <div className="weather-temp">{temp}</div>
-            <div className="weather-location">{location}</div>
+            <div className="weather-temp">0&deg;F</div>
+            <div className="weather-location">Location</div>
             <div className="data-container">
-
                 <div className="element">
                     <img src={humidity_icon} alt="" className="icon" />
                     <div className="data">
-                        <div className="humidity-percent">{humidity}</div>
+                        <div className="humidity-percent">0%</div>
                         <div className="text">Humidity</div>
                     </div>
                 </div>
-
                 <div className="element">
                     <img src={wind_icon} alt="" className="icon" />
                     <div className="data">
-                        <div className="wind-rate">{wind}</div>
+                        <div className="wind-rate">0 mph</div>
                         <div className="text">Wind Speed</div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     )
 }
