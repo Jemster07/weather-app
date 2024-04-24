@@ -40,14 +40,21 @@ const WeatherApp = () => {
     }, [latitude, longitude]);
 
     const search = async () => {
-        const element = document.getElementsByClassName("cityInput");
+        const element = document.getElementsByClassName("zipInput");
 
         if (element[0].value === "") {
             return 0;
         } else {
-            let url = `${process.env.REACT_APP_API_URL}/weather/?q=${element[0].value}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
-            let response = await fetch(url);
-            let data = await response.json();
+            let zipURL = `${process.env.REACT_APP_GEOCODE_API_URL}/zip?zip=${element[0].value},US&appid=${process.env.REACT_APP_API_KEY}`;
+            let zipResponse = await fetch(zipURL);
+            let zipData = await zipResponse.json();
+            let lat = zipData.lat;
+            let lon = zipData.lon;
+
+            let coordURL = `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${lon}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
+            let coordResponse = await fetch(coordURL);
+            let data = await coordResponse.json();
+
             setHumidity(data.main.humidity);
             setWind(Math.floor(data.wind.speed));
             setTemp(Math.floor(data.main.temp));
@@ -75,32 +82,36 @@ const WeatherApp = () => {
     }
 
     return (
-        <div className="container">
-            <div className="top-bar">
-                <input type="text" className="cityInput" placeholder="search" />
-                <div className="search-icon" onClick={() => { search() }}>
-                    <img src={search_icon} alt="" />
+        <div className="app">
+            <div className="container">
+                <div className="weather-image">
+                    <img src={weatherIcon} alt="" />
                 </div>
-            </div>
-            <div className="weather-image">
-                <img src={weatherIcon} alt="" />
-            </div>
-            <div className="weather-temp">{temp}&deg;F</div>
-            <div className="weather-location">{location}</div>
-            <div className="data-container">
-                <div className="element">
-                    <img src={humidity_icon} alt="" className="icon" />
-                    <div className="data">
-                        <div className="humidity-percent">{humidity}%</div>
-                        <div className="text">Humidity</div>
+                <div className="weather-temp">{temp}&deg;F</div>
+                <div className="weather-location">{location}</div>
+                <div className="data-container">
+                    <div className="element">
+                        <img src={humidity_icon} alt="" className="icon" />
+                        <div className="data">
+                            <div className="humidity-percent">{humidity}%</div>
+                            <div className="text">Humidity</div>
+                        </div>
+                    </div>
+                    <div className="element">
+                        <img src={wind_icon} alt="" className="icon" />
+                        <div className="data">
+                            <div className="wind-rate">{wind} mph</div>
+                            <div className="text">Wind Speed</div>
+                        </div>
                     </div>
                 </div>
-                <div className="element">
-                    <img src={wind_icon} alt="" className="icon" />
-                    <div className="data">
-                        <div className="wind-rate">{wind} mph</div>
-                        <div className="text">Wind Speed</div>
-                    </div>
+                <div className="search-field">
+                    <form onSubmit={() => { search() }}>
+                        <input className="zipInput" type="text" pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                        <button className="search-icon" type="submit">
+                            <img src={search_icon} alt="" />
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

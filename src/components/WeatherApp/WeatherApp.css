@@ -1,4 +1,4 @@
-.container{
+.app{
     width: 607px;
     height: 775px;
     margin: auto;
@@ -6,13 +6,16 @@
     border-radius: 12px;
     background-image: linear-gradient(180deg, #130754 0%, #3b2f80 100%);
 }
-.top-bar{
+.container{
+    padding-top: 8px;
+}
+.search-field{
     display: flex;
     justify-content: center;
     gap: 14px;
     padding-top: 60px;
 }
-.top-bar input{
+.search-field input{
     display: flex;
     width: 362px;
     height: 78px;
@@ -41,7 +44,7 @@
     justify-content: center;
 }
 .weather-temp{
-    margin-top: 50px;
+    margin-top: 55px;
     display: flex;
     justify-content: center;
     color: white;
@@ -57,7 +60,7 @@
     font-weight: 400;
 }
 .data-container{
-    margin-top: 90px;
+    margin-top: 80px;
     color: white;
     display:flex;
     justify-content: center;
