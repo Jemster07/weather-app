@@ -11,42 +11,35 @@ import humidity_icon from '../assets/humidity.png';
 
 const WeatherApp = () => {
 
-    const [latitude, setLatitude] = useState([]);
-    const [longitude, setLongitude] = useState([]);
+    const [latitude, setLatitude] = useState();
+    const [longitude, setLongitude] = useState();
     const [weatherIcon, setWeatherIcon] = useState(cloud_icon);
-    // const [localData, setLocalData] = useState([]);
-    const [humidity, setHumidity] = useState([]);
-    const [wind, setWind] = useState([]);
-    const [temp, setTemp] = useState([]);
-    const [location, setLocation] = useState([]);
-
+    const [humidity, setHumidity] = useState();
+    const [wind, setWind] = useState();
+    const [temp, setTemp] = useState();
+    const [location, setLocation] = useState();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
         });
-    }, []);
+        console.log(latitude);
+        console.log(longitude);
 
-    useEffect(() => {
-        const getLocalWeather = async () => {
-            let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
-            let response = await fetch(url);
-            let data = await response.json();
-            setHumidity(data.main.humidity);
-            setWind(Math.floor(data.wind.speed));
-            setTemp(Math.floor(data.main.temp));
-            setLocation(data.name);
+        if (latitude !== undefined && latitude !== null && longitude !== undefined && longitude !== null) {
+            const getLocalWeather = async () => {
+                let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
+                let response = await fetch(url);
+                let data = await response.json();
+                setHumidity(data.main.humidity);
+                setWind(Math.floor(data.wind.speed));
+                setTemp(Math.floor(data.main.temp));
+                setLocation(data.name);
+            }
+            getLocalWeather();
         }
-        getLocalWeather();
     }, [latitude, longitude]);
-
-    // useEffect(() => {
-    //     setHumidity(`${localData.main.humidity} %`);
-    //     setWind(`${Math.floor(localData.wind.speed)} mph`);
-    //     setTemp(`${Math.floor(localData.main.temp)}&deg;F`);
-    //     setLocation(localData.name);
-    // }, [localData]);
 
     const search = async () => {
         const element = document.getElementsByClassName("cityInput");
@@ -57,11 +50,10 @@ const WeatherApp = () => {
             let url = `${process.env.REACT_APP_API_URL}/weather/?q=${element[0].value}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
             let response = await fetch(url);
             let data = await response.json();
-
-            // humidity[0].innerHTML = `${data.main.humidity} %`;
-            // wind[0].innerHTML = `${Math.floor(data.wind.speed)} mph`;
-            // temp[0].innerHTML = `${Math.floor(data.main.temp)}&deg;F`;
-            // location[0].innerHTML = data.name;
+            setHumidity(data.main.humidity);
+            setWind(Math.floor(data.wind.speed));
+            setTemp(Math.floor(data.main.temp));
+            setLocation(data.name);
 
             if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") {
                 setWeatherIcon(clear_icon);
