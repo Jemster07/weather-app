@@ -24,8 +24,6 @@ const WeatherApp = () => {
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
         });
-        console.log(latitude);
-        console.log(longitude);
 
         if (latitude !== undefined && latitude !== null && longitude !== undefined && longitude !== null) {
             const getLocalWeather = async () => {
