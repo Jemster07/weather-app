@@ -18,7 +18,7 @@ const WeatherApp = () => {
     const [wind, setWind] = useState();
     const [temp, setTemp] = useState();
     const [location, setLocation] = useState();
-    const [inputValue, setInputValue] = useState();
+    const [searchQuery, setSearchQuery] = useState();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -46,12 +46,10 @@ const WeatherApp = () => {
     };
 
     const search = async () => {        
-        const element = document.getElementsByClassName("zipInput");
-
-        if (element[0].value === "") {
+        if (searchQuery === undefined || searchQuery === "") {
             return 0;
         } else {
-            let zipURL = `${process.env.REACT_APP_GEOCODE_API_URL}/zip?zip=${element[0].value},US&appid=${process.env.REACT_APP_API_KEY}`;
+            let zipURL = `${process.env.REACT_APP_GEOCODE_API_URL}/zip?zip=${searchQuery},US&appid=${process.env.REACT_APP_API_KEY}`;
             let zipResponse = await fetch(zipURL);
             let zipData = await zipResponse.json();
             let lat = zipData.lat;
@@ -113,7 +111,7 @@ const WeatherApp = () => {
                 </div>
                 <div className="search-field">
                     <form onSubmit={handleSubmit}>
-                        <input className="zipInput" type="text" value={inputValue} onChange={(event) => setInputValue(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                        <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
                         <button className="search-icon" type="submit">
                             <img src={search_icon} alt="search button" />
                         </button>

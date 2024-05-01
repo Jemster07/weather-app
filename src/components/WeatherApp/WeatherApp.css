@@ -9,13 +9,14 @@
 .container{
     padding-top: 8px;
 }
-.search-field{
+.search-field form{
     display: flex;
     justify-content: center;
     gap: 14px;
     padding-top: 60px;
 }
-.search-field input{
+
+.search-field form input{
     display: flex;
     width: 362px;
     height: 78px;
