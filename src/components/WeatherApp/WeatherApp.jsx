@@ -18,6 +18,7 @@ const WeatherApp = () => {
     const [wind, setWind] = useState();
     const [temp, setTemp] = useState();
     const [location, setLocation] = useState();
+    const [inputValue, setInputValue] = useState();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -39,7 +40,12 @@ const WeatherApp = () => {
         }
     }, [latitude, longitude]);
 
-    const search = async () => {
+    function handleSubmit(event) {
+        event.preventDefault();
+        search();
+    };
+
+    const search = async () => {        
         const element = document.getElementsByClassName("zipInput");
 
         if (element[0].value === "") {
@@ -106,10 +112,10 @@ const WeatherApp = () => {
                     </div>
                 </div>
                 <div className="search-field">
-                    <form onSubmit={() => { search() }}>
-                        <input className="zipInput" type="text" pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                    <form onSubmit={handleSubmit}>
+                        <input className="zipInput" type="text" value={inputValue} onChange={(event) => setInputValue(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
                         <button className="search-icon" type="submit">
-                            <img src={search_icon} alt="" />
+                            <img src={search_icon} alt="search button" />
                         </button>
                     </form>
                 </div>
