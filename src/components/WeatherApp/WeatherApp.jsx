@@ -19,6 +19,8 @@ const WeatherApp = () => {
     const [temp, setTemp] = useState();
     const [location, setLocation] = useState();
     const [searchQuery, setSearchQuery] = useState();
+    const [initialVisit, setInitialVisit] = useState(true);
+    const [permission, setPermission] = useState();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -43,6 +45,21 @@ const WeatherApp = () => {
     function handleSubmit(event) {
         event.preventDefault();
         search();
+    };
+
+    function checkNavPermissions() {
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+            if (result.state === 'granted') {
+    
+            } else if (result.state === 'prompt') {
+    
+            } else if (result.state === 'denied') {
+    
+            }
+            result.addEventListener('change', () => {
+    
+            });
+        });    
     };
 
     const search = async () => {        
@@ -87,37 +104,56 @@ const WeatherApp = () => {
 
     return (
         <div className="app">
-            <div className="container">
-                <div className="weather-image">
-                    <img src={weatherIcon} alt="" />
+            {initialVisit ?
+                <div className="container">
+                    <div className="user-prompt">Enter a ZIP code or use current location:</div>
+
+                    <div className="search-field">
+                        <form onSubmit={handleSubmit}>
+                            <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                            <button className="search-icon" type="submit">
+                                <img src={search_icon} alt="search button" />
+                            </button>
+                        </form>
+                    </div>
+
+                    <button>Use Location</button>
                 </div>
-                <div className="weather-temp">{temp}&deg;F</div>
-                <div className="weather-location">{location}</div>
-                <div className="data-container">
-                    <div className="element">
-                        <img src={humidity_icon} alt="" className="icon" />
-                        <div className="data">
-                            <div className="humidity-percent">{humidity}%</div>
-                            <div className="text">Humidity</div>
+
+            :                
+                <div className="container">
+                    <div className="weather-image">
+                        <img src={weatherIcon} alt="" />
+                    </div>
+                    <div className="weather-temp">{temp}&deg;F</div>
+                    <div className="weather-location">{location}</div>
+                    <div className="data-container">
+                        <div className="element">
+                            <img src={humidity_icon} alt="" className="icon" />
+                            <div className="data">
+                                <div className="humidity-percent">{humidity}%</div>
+                                <div className="text">Humidity</div>
+                            </div>
+                        </div>
+                        <div className="element">
+                            <img src={wind_icon} alt="" className="icon" />
+                            <div className="data">
+                                <div className="wind-rate">{wind} mph</div>
+                                <div className="text">Wind Speed</div>
+                            </div>
                         </div>
                     </div>
-                    <div className="element">
-                        <img src={wind_icon} alt="" className="icon" />
-                        <div className="data">
-                            <div className="wind-rate">{wind} mph</div>
-                            <div className="text">Wind Speed</div>
-                        </div>
+                    <div className="search-field">
+                        <form onSubmit={handleSubmit}>
+                            <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                            <button className="search-icon" type="submit">
+                                <img src={search_icon} alt="search button" />
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <div className="search-field">
-                    <form onSubmit={handleSubmit}>
-                        <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
-                        <button className="search-icon" type="submit">
-                            <img src={search_icon} alt="search button" />
-                        </button>
-                    </form>
-                </div>
-            </div>
+            
+            }           
         </div>
     )
 }
