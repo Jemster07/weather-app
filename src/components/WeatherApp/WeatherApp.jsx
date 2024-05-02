@@ -18,28 +18,36 @@ const WeatherApp = () => {
     const [wind, setWind] = useState();
     const [temp, setTemp] = useState();
     const [location, setLocation] = useState();
-    const [searchQuery, setSearchQuery] = useState();
+    const [searchQuery, setSearchQuery] = useState("");
     const [initialVisit, setInitialVisit] = useState(true);
-    const [permission, setPermission] = useState();
+    const [permission, setPermission] = useState(false);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
         });
+        
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+            if (result.state === 'granted') {      
+                if (latitude !== undefined && latitude !== null && longitude !== undefined && longitude !== null) {
+                    const getLocalWeather = async () => {
+                        let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
+                        let response = await fetch(url);
+                        let data = await response.json();
+                        setHumidity(data.main.humidity);
+                        setWind(Math.floor(data.wind.speed));
+                        setTemp(Math.floor(data.main.temp));
+                        setLocation(data.name);
+                    }
+                    getLocalWeather();
 
-        if (latitude !== undefined && latitude !== null && longitude !== undefined && longitude !== null) {
-            const getLocalWeather = async () => {
-                let url = `${process.env.REACT_APP_API_URL}/weather?lat=${latitude}&lon=${longitude}&units=Imperial&appid=${process.env.REACT_APP_API_KEY}`;
-                let response = await fetch(url);
-                let data = await response.json();
-                setHumidity(data.main.humidity);
-                setWind(Math.floor(data.wind.speed));
-                setTemp(Math.floor(data.main.temp));
-                setLocation(data.name);
+                    console.log("status is granted");
+                    setPermission(true);    
+                }        
             }
-            getLocalWeather();
-        }
+        }); 
+        
     }, [latitude, longitude]);
 
     function handleSubmit(event) {
@@ -47,22 +55,19 @@ const WeatherApp = () => {
         search();
     };
 
-    function checkNavPermissions() {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-            if (result.state === 'granted') {
-    
-            } else if (result.state === 'prompt') {
-    
-            } else if (result.state === 'denied') {
-    
-            }
-            result.addEventListener('change', () => {
-    
-            });
-        });    
+    function permissionCheck() {
+        if (permission === true) {
+            setInitialVisit(false);
+        } else {
+            console.log("button clicked and location permission not granted");
+        }
     };
 
     const search = async () => {        
+        if (initialVisit === true) {
+            setInitialVisit(false);
+        }
+        
         if (searchQuery === undefined || searchQuery === "") {
             return 0;
         } else {
@@ -117,10 +122,11 @@ const WeatherApp = () => {
                         </form>
                     </div>
 
-                    <button>Use Location</button>
+                    <button onClick={permissionCheck}>Use Current Location</button>
                 </div>
 
             :                
+    
                 <div className="container">
                     <div className="weather-image">
                         <img src={weatherIcon} alt="" />
