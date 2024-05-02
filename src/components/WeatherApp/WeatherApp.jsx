@@ -123,6 +123,7 @@ const WeatherApp = () => {
                     </div>
 
                     <button onClick={permissionCheck}>Use Current Location</button>
+                    <div className="loader"></div>
                 </div>
 
             :                
