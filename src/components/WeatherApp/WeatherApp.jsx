@@ -119,7 +119,7 @@ const WeatherApp = () => {
                             </button>
                         </form>
 
-                        <div className="user-prompt">Enter a ZIP code or use current location:</div>
+                        <div className="user-prompt">- OR -</div>
 
                         <button className="current-location-button" onClick={permissionCheck}>
                             {location === undefined ?                     
