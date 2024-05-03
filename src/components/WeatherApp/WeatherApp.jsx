@@ -111,23 +111,26 @@ const WeatherApp = () => {
         <div className="app">
             {initialVisit ?
                 <div className="container">
-                    <div className="user-prompt">Enter a ZIP code or use current location:</div>
-
                     <div className="search-field">
                         <form onSubmit={handleSubmit}>
                             <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
-                            <button className="search-icon" type="submit">
+                            <button className="search-button" type="submit">
                                 <img src={search_icon} alt="search button" />
                             </button>
                         </form>
+
+                        <div className="user-prompt">Enter a ZIP code or use current location:</div>
+
+                        <button className="current-location-button" onClick={permissionCheck}>
+                            {location === undefined ?                     
+                                <div className="loader"></div>
+                            :
+                                <p>Use Current Location</p>
+                            }                       
+                        </button>
                     </div>
-
-                    <button onClick={permissionCheck}>Use Current Location</button>
-                    <div className="loader"></div>
                 </div>
-
-            :                
-    
+            :                   
                 <div className="container">
                     <div className="weather-image">
                         <img src={weatherIcon} alt="" />
@@ -153,13 +156,12 @@ const WeatherApp = () => {
                     <div className="search-field">
                         <form onSubmit={handleSubmit}>
                             <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
-                            <button className="search-icon" type="submit">
+                            <button className="search-button" type="submit">
                                 <img src={search_icon} alt="search button" />
                             </button>
                         </form>
                     </div>
-                </div>
-            
+                </div>           
             }           
         </div>
     )
