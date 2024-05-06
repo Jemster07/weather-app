@@ -41,9 +41,7 @@ const WeatherApp = () => {
                         setLocation(data.name);
                     }
                     getLocalWeather();
-
-                    console.log("status is granted");
-                    setPermission(true);    
+                    setTimeout(setPermission(true), 2000);    
                 }        
             }
         }); 
@@ -59,15 +57,11 @@ const WeatherApp = () => {
         if (permission === true) {
             setInitialVisit(false);
         } else {
-            console.log("button clicked and location permission not granted");
+            console.log("Button clicked but location fetch incomplete");
         }
     };
 
-    const search = async () => {        
-        if (initialVisit === true) {
-            setInitialVisit(false);
-        }
-        
+    const search = async () => {            
         if (searchQuery === undefined || searchQuery === "") {
             return 0;
         } else {
@@ -105,12 +99,16 @@ const WeatherApp = () => {
                 setWeatherIcon(cloud_icon);
             }
         }
+
+        if (initialVisit === true) {
+            setTimeout(setInitialVisit(false), 2000);
+        }
     }
 
     return (
         <div className="app">
             {initialVisit ?
-                <div className="container">
+                <div className="landing-page">
                     <div className="search-field">
                         <form onSubmit={handleSubmit}>
                             <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
@@ -121,20 +119,22 @@ const WeatherApp = () => {
 
                         <div className="user-prompt">- OR -</div>
 
-                        <button className="current-location-button" onClick={permissionCheck}>
-                            {location === undefined ?                     
+                        {location === undefined ?
+                            <button disabled className="current-location-button">
                                 <div className="loader"></div>
-                            :
+                            </button>
+                        :
+                            <button className="current-location-button" onClick={permissionCheck}>
                                 <p>Use Current Location</p>
-                            }                       
-                        </button>
+                            </button>
+                        }
                     </div>
                 </div>
             :                   
-                <div className="container">
-                    <div className="weather-image">
+                <div className="result">
+                    <figure className="weather-image">
                         <img src={weatherIcon} alt="" />
-                    </div>
+                    </figure>
                     <div className="weather-temp">{temp}&deg;F</div>
                     <div className="weather-location">{location}</div>
                     <div className="data-container">
