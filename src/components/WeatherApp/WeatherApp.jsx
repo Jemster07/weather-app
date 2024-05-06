@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './WeatherApp.css';
 import search_icon from '../assets/search.png';
-import clear_icon from '../assets/clear.png';
-import cloud_icon from '../assets/cloud.png';
-import drizzle_icon from '../assets/drizzle.png';
-import rain_icon from '../assets/rain.png';
-import snow_icon from '../assets/snow.png';
 import wind_icon from '../assets/wind.png';
 import humidity_icon from '../assets/humidity.png';
 
@@ -13,7 +8,7 @@ const WeatherApp = () => {
 
     const [latitude, setLatitude] = useState();
     const [longitude, setLongitude] = useState();
-    const [weatherIcon, setWeatherIcon] = useState(cloud_icon);
+    const [weatherIcon, setWeatherIcon] = useState();
     const [humidity, setHumidity] = useState();
     const [wind, setWind] = useState();
     const [temp, setTemp] = useState();
@@ -38,6 +33,7 @@ const WeatherApp = () => {
                         setHumidity(data.main.humidity);
                         setWind(Math.floor(data.wind.speed));
                         setTemp(Math.floor(data.main.temp));
+                        setWeatherIcon(`${process.env.REACT_APP_ICON_URL}/${data.weather[0].icon}@2x.png`);
                         setLocation(data.name);
                     }
                     getLocalWeather();
@@ -78,26 +74,8 @@ const WeatherApp = () => {
             setHumidity(data.main.humidity);
             setWind(Math.floor(data.wind.speed));
             setTemp(Math.floor(data.main.temp));
+            setWeatherIcon(`${process.env.REACT_APP_ICON_URL}/${data.weather[0].icon}@2x.png`);
             setLocation(data.name);
-
-            if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") {
-                setWeatherIcon(clear_icon);
-            }
-            else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n" || data.weather[0].icon === "03d" || data.weather[0].icon === "03n" || data.weather[0].icon === "04d" || data.weather[0].icon === "04n") {
-                setWeatherIcon(cloud_icon);
-            }
-            else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n" || data.weather[0].icon === "50d" || data.weather[0].icon === "50n") {
-                setWeatherIcon(drizzle_icon);
-            }
-            else if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n" || data.weather[0].icon === "11d" || data.weather[0].icon === "11n") {
-                setWeatherIcon(rain_icon);
-            }
-            else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") {
-                setWeatherIcon(snow_icon);
-            }
-            else {
-                setWeatherIcon(cloud_icon);
-            }
         }
 
         if (initialVisit === true) {

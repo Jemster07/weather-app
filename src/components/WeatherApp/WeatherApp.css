@@ -65,6 +65,11 @@
     justify-content: center;
 }
 
+.weather-image img{
+    width: 10rem;
+    height: 10rem;
+}
+
 .weather-temp{
     margin-top: 4rem;
     display: flex;
