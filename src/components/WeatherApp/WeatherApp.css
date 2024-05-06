@@ -1,86 +1,133 @@
 .app{
-    width: 607px;
-    height: 775px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40rem;
+    height: 55rem;
     margin: auto;
-    margin-top: 75px;
-    border-radius: 12px;
+    margin-top: 5rem;
+    border-radius: .75rem;
     background-image: linear-gradient(180deg, #130754 0%, #3b2f80 100%);
 }
-.container{
-    padding-top: 8px;
-}
-.search-field form{
+
+.landing-page .search-field form{
     display: flex;
     justify-content: center;
-    gap: 14px;
-    padding-top: 60px;
+    gap: 1rem;
+}
+
+.result .search-field form{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 4.25rem;
 }
 
 .search-field form input{
     display: flex;
-    width: 362px;
-    height: 78px;
+    width: 25rem;
+    height: 5.25rem;
     background: #ebfffc;
     border: none;
     outline: none;
-    border-radius: 40px;
-    padding-left: 40px;
+    border-radius: 2.5rem;
+    padding-left: 2.5rem;
     color: #626262;
-    font-size: 20px;
+    font-size: 1.5rem;
     font-weight: 400;
 }
-.search-icon{
+
+.search-field form button.search-button{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 78px;
-    height: 78px;
+    width: 5.25rem;
+    height: 5.25rem;
     background: #ebfffc;
-    border-radius: 40px;
+    border-radius: 2.5rem;
     cursor: pointer;
 }
+
+.search-field .current-location-button{
+    width: 20rem;
+    height: 5.25rem;
+    background: #ebfffc;
+    border-radius: 2.5rem;
+    cursor: pointer;
+    color: #626262;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
 .weather-image{
-    margin-top: 29px;
+    margin: 0%;
     display: flex;
     justify-content: center;
 }
+
 .weather-temp{
-    margin-top: 55px;
+    margin-top: 4rem;
     display: flex;
     justify-content: center;
     color: white;
-    font-size: 120px;
+    font-size: 8rem;
     font-weight: 400;
 }
+
 .weather-location{
-    margin-top: 85px;
+    margin-top: 6rem;
     display: flex;
     justify-content: center;
     color: white;
-    font-size: 60px;
+    font-size: 4.25rem;
     font-weight: 400;
 }
+
 .data-container{
-    margin-top: 80px;
+    margin-top: 5rem;
     color: white;
-    display:flex;
+    display: flex;
     justify-content: center;
 }
+
 .element{
     margin: auto;
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: .75rem;
 }
+
 .data{
-    font-size: 34px;
+    font-size: 2.5rem;
     font-weight: 400;
 }
+
 .text{
-    margin-top: 15px;
-    font-size: 20px;
+    margin-top: 1rem;
+    font-size: 1.5rem;
     font-weight: 400;
 }
+
 .icon{
-    margin-top: 7px;
+    margin-top: .5rem;
 }
+
+.prompt-text{
+    color: white;
+    padding: 2rem 0rem;
+}
+
+.loader {
+    margin: auto;
+    border: 1rem solid #3b2f80;
+    border-radius: 50%;
+    border-top: 1rem solid #f3a74a;
+    width: 4rem;
+    height: 4rem;
+    animation: spinner 2s linear infinite;
+}
+  
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}  
