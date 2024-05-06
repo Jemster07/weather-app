@@ -110,15 +110,6 @@ const WeatherApp = () => {
             {initialVisit ?
                 <div className="landing-page">
                     <div className="search-field">
-                        <form onSubmit={handleSubmit}>
-                            <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
-                            <button className="search-button" type="submit">
-                                <img src={search_icon} alt="search button" />
-                            </button>
-                        </form>
-
-                        <div className="user-prompt">- OR -</div>
-
                         {location === undefined ?
                             <button disabled className="current-location-button">
                                 <div className="loader"></div>
@@ -127,7 +118,16 @@ const WeatherApp = () => {
                             <button className="current-location-button" onClick={permissionCheck}>
                                 <p>Use Current Location</p>
                             </button>
-                        }
+                        }                       
+
+                        <div className="prompt-text">- OR -</div>
+
+                        <form onSubmit={handleSubmit}>
+                            <input className="zipInput" type="text" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} pattern="[0-9]{5}" placeholder="ZIP code search" required />
+                            <button className="search-button" type="submit">
+                                <img src={search_icon} alt="search button" />
+                            </button>
+                        </form>
                     </div>
                 </div>
             :                   
