@@ -113,9 +113,6 @@ const WeatherApp = () => {
             :                   
                 <div className="result" style={{backgroundImage: "url(" + weatherIcon + ")"}}>
                     <div className="container">
-                        <figure className="weather-image">
-                            <img src={weatherIcon} alt="" />
-                        </figure>
                         <div className="weather-temp">{temp}&deg;F</div>
                         <div className="weather-location">{location}</div>
                         <div className="data-container">
